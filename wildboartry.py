@@ -1,4 +1,5 @@
 import arcade
+import random
 
 #
 SCREEN_WIDTH = 800
@@ -6,11 +7,10 @@ SCREEN_HEIGHT = 600
 SCREEN_TITLE = "A Boar's Life"
 
 BOAR_SPEED = 5
-BOAR_SCALING = 1.5
+BOAR_SCALING = 1.7
 
 
 BOAR_WALK_FOLDER = "/Users/beverlylee/Downloads/ezgif-split"
-TIMER_FOLDER = "/Users/beverlylee/Downloads/0100"
 
 
 STATE_WELCOME = 0
@@ -23,20 +23,19 @@ class BoarsLife(arcade.Window):
 
         self.sprite_list = None  # Combined sprite list for all sprites
         self.boar = None
-        self.timer_sprite = None
 
         self.game_state = STATE_WELCOME
-
-        # animation
         self.current_frame = 0
         self.frame_timer = 0
         self.current_direction = "down"
 
-        self.timer_frames = []
-        self.timer_index = 60   # start at 60 seconds
-        self.timer_elapsed = 0
-
         arcade.set_background_color(arcade.color.ANDROID_GREEN)
+
+    def spawn_star(self):
+        """Place star randomly on screen"""
+        self.star.center_x = random.randint(50, SCREEN_WIDTH - 50)
+        self.star.center_y = random.randint(50, SCREEN_HEIGHT - 50)
+
 
     def setup(self):
         """Initialize the game"""
@@ -70,69 +69,7 @@ class BoarsLife(arcade.Window):
             arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile023.png"),
         ]
 
-        timer_frames = [
-            arcade.load_texture(f"{TIMER_FOLDER}/1.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/2.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/3.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/4.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/5.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/6.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/7.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/8.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/9.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/10.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/11.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/12.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/13.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/14.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/15.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/16.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/17.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/18.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/19.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/20.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/21.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/22.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/23.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/24.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/25.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/26.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/27.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/28.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/29.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/30.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/31.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/32.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/33.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/34.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/35.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/36.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/37.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/38.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/39.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/40.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/41.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/42.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/43.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/44.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/45.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/46.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/47.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/48.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/49.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/50.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/51.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/52.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/53.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/54.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/55.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/56.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/57.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/58.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/59.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/60.png"),
-            arcade.load_texture(f"{TIMER_FOLDER}/61.png")
-        ]
+        
         
 
         # directions
@@ -156,17 +93,14 @@ class BoarsLife(arcade.Window):
         # Add boar to sprite list
         self.sprite_list.append(self.boar)
 
-        # Create timer sprite
-        self.timer_frames = timer_frames
-        self.timer_sprite = arcade.Sprite()
-        self.timer_sprite.textures = self.timer_frames
-        self.timer_sprite.set_texture(self.timer_index - 1)
-        self.timer_sprite.center_x = SCREEN_WIDTH - 100
-        self.timer_sprite.center_y = SCREEN_HEIGHT - 550
-        self.timer_sprite.scale = 0.05
+        # Create star sprite
+        self.star = arcade.Sprite(":resources:images/items/star.png", scale=0.5)
+        self.spawn_star()
+        self.sprite_list.append(self.star)
 
-        # Add timer to sprite list
-        self.sprite_list.append(self.timer_sprite)
+        print(self.star.center_x, self.star.center_y)
+
+
 
 
     def on_draw(self):
@@ -238,20 +172,6 @@ class BoarsLife(arcade.Window):
         if self.boar.top > SCREEN_HEIGHT:
             self.boar.top = SCREEN_HEIGHT
 
-        # TIMER COUNTDOWN
-        self.timer_elapsed += delta_time
-
-        if self.timer_elapsed >= 1.0 and self.timer_index > 0:
-            self.timer_elapsed = 0
-            self.timer_index -= 1
-            self.timer_sprite.set_texture(self.timer_index - 1)
-
-        # GAME OVER when timer hits 0
-        if self.timer_index <= 0:
-            print("TIME UP!")
-            self.game_state = STATE_WELCOME
-            return
-
 
         # Determine direction and frames for walking
         frames = []
@@ -280,6 +200,12 @@ class BoarsLife(arcade.Window):
             self.frame_timer = 0
             self.current_frame = (self.current_frame + 1) % len(frames)
             self.boar.set_texture(frames[self.current_frame])
+
+        # CHECK COLLISION WITH STAR (FOOD)
+        if arcade.check_for_collision(self.boar, self.star):
+            print("Boar ate the star!")
+            self.spawn_star()   # respawn food
+
 
     def get_direction_frame(self):
         if self.current_direction == "down":
