@@ -10,7 +10,6 @@ BOAR_SCALING = 1.5
 
 
 BOAR_WALK_FOLDER = "/Users/beverlylee/Downloads/ezgif-split"
-BOAR_ATTACK_FOLDER = "/Users/beverlylee/Downloads/ezgif-split-3"
 TIMER_FOLDER = "/Users/beverlylee/Downloads/0100"
 
 
@@ -32,11 +31,6 @@ class BoarsLife(arcade.Window):
         self.current_frame = 0
         self.frame_timer = 0
         self.current_direction = "down"
-
-        self.attacking = False
-        self.attack_frame = 0
-        self.attack_timer = 0
-        self.attack_direction = "down"
 
         self.timer_frames = []
         self.timer_index = 60   # start at 60 seconds
@@ -74,29 +68,6 @@ class BoarsLife(arcade.Window):
             arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile021.png"),
             arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile022.png"),
             arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile023.png"),
-        ]
-
-        boar_attack_frames = [
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile000.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile001.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile002.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile003.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile004.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile005.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile006.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile007.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile008.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile009.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile010.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile011.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile012.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile013.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile014.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile015.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile016.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile017.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile018.png"),
-            arcade.load_texture(f"{BOAR_ATTACK_FOLDER}/tile019.png"),
         ]
 
         timer_frames = [
@@ -174,7 +145,6 @@ class BoarsLife(arcade.Window):
         self.boar = arcade.Sprite()
         self.boar.textures = boar_frames
         self.boar.set_texture(0)
-        self.boar_attack_frames = boar_attack_frames
 
         self.boar.center_x = SCREEN_WIDTH // 2
         self.boar.center_y = 150
@@ -242,8 +212,6 @@ class BoarsLife(arcade.Window):
             self.boar.change_x = -BOAR_SPEED
         if key in [arcade.key.D, arcade.key.RIGHT]:
             self.boar.change_x = BOAR_SPEED
-        if key == arcade.key.SPACE:
-            self.start_attack()
 
 
     def on_key_release(self, key, modifiers):
@@ -284,30 +252,6 @@ class BoarsLife(arcade.Window):
             self.game_state = STATE_WELCOME
             return
 
-        # Attack animation
-        if self.attacking:
-            self.attack_timer += delta_time
-            if self.attack_timer > 0.07:  # attack speed
-                self.attack_timer = 0
-                self.attack_frame += 1
-
-            # stop after 5
-            if self.attack_frame >= 5:
-                self.attacking = False
-                return
-
-            # direction
-            if self.attack_direction == "down":
-                base = 0
-            elif self.attack_direction == "up":
-                base = 5
-            elif self.attack_direction == "left":
-                base = 10
-            else:  # right
-                base = 15
-
-            self.boar.texture = self.boar_attack_frames[base + self.attack_frame]
-            return  # stop walk animation during attack
 
         # Determine direction and frames for walking
         frames = []
@@ -347,15 +291,6 @@ class BoarsLife(arcade.Window):
         elif self.current_direction == "right":
             return self.right_frames
         return self.down_frames  # fallback
-    
-    def start_attack(self):
-        if self.attacking:
-            return  # prevent spam
-
-        self.attacking = True
-        self.attack_frame = 0
-        self.attack_timer = 0
-        self.attack_direction = self.current_direction
 
 
 
