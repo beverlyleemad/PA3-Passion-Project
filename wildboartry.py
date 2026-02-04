@@ -77,6 +77,18 @@ class BoarsLife(arcade.Window):
             arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile022.png"),
             arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile023.png"),
         ]
+        
+        # welcome
+        self.welcome_sprite = arcade.Sprite(
+    "/Users/beverlylee/Downloads/welcome to a boars life.png"
+)
+        self.welcome_sprite.center_x = SCREEN_WIDTH // 2
+        self.welcome_sprite.center_y = SCREEN_HEIGHT // 2
+        self.welcome_sprite.scale = 0.5
+
+        # Put it in a sprite list
+        self.welcome_list = arcade.SpriteList()
+        self.welcome_list.append(self.welcome_sprite)
 
         # directions
         self.down_frames = list(range(0, 6))
@@ -100,7 +112,7 @@ class BoarsLife(arcade.Window):
         self.sprite_list.append(self.boar)
 
         # Create star sprite
-        self.star = arcade.Sprite(":resources:images/items/star.png", scale=0.5)
+        self.star = arcade.Sprite(":resources:/images/tiles/mushroomRed.png", scale=0.5)
         self.spawn_star()
         self.sprite_list.append(self.star)
 
@@ -118,22 +130,8 @@ class BoarsLife(arcade.Window):
             self.draw_game()
 
     def draw_welcome(self):
-        arcade.draw_text(
-            "Welcome to A Boar's Life!",
-            SCREEN_WIDTH // 2,
-            SCREEN_HEIGHT // 2 + 50,
-            arcade.color.BLACK,
-            font_size=36,
-            anchor_x="center"
-        )
-        arcade.draw_text(
-            "Press ENTER to start",
-            SCREEN_WIDTH // 2,
-            SCREEN_HEIGHT // 2 - 50,
-            arcade.color.DARK_GREEN,
-            font_size=24,
-            anchor_x="center"
-        )
+        self.welcome_list.draw()
+
 
     def draw_game(self):
         # Draw all sprites from the single sprite list
@@ -141,7 +139,7 @@ class BoarsLife(arcade.Window):
         
         self.baby_boars.draw()
 
-        arcade.draw_text(f"Stars: {self.boar_score}",
+        arcade.draw_text(f"Babies: {self.boar_score}",
             10, SCREEN_HEIGHT - 30,
             arcade.color.BLACK, 20)
 
