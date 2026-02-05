@@ -118,9 +118,6 @@ class BoarsLife(arcade.Window):
 
         print(self.star.center_x, self.star.center_y)
 
-
-
-
     def on_draw(self):
         self.clear()
 
@@ -210,18 +207,18 @@ class BoarsLife(arcade.Window):
         self.boar_positions = self.boar_positions[:len(self.baby_boars) * 25 + 1]
 
         # move babies + detect direction
-        for i, baby in enumerate(self.baby_boars):
-            index = (i + 1) * 10
+        for i, baby in enumerate(self.baby_boars): # for loop for babies
+            index = (i + 1) * 10 # picks a spot ten pixels away
             if index < len(self.boar_positions):
-                old_x, old_y = baby.center_x, baby.center_y
-                baby.center_x, baby.center_y = self.boar_positions[index]
+                old_x, old_y = baby.center_x, baby.center_y # save old position + set baby there
+                baby.center_x, baby.center_y = self.boar_positions[index] # set baby's new position to that poin
 
-                dx = baby.center_x - old_x
-                dy = baby.center_y - old_y
-                data = self.baby_data[i]
+                dx = baby.center_x - old_x # find change in x (so physics coded yay) and then see if its going + or -
+                dy = baby.center_y - old_y # find change in y (so physics coded yay) and then see if its going + or -
+                data = self.baby_data[i] # append to index of directions for animation and stuff
 
                 if abs(dx) > abs(dy):
-                    data["direction"] = "right" if dx > 0 else "left"
+                    data["direction"] = "right" if dx > 0 else "left" # pick the direction
                 else:
                     data["direction"] = "up" if dy > 0 else "down"
 
