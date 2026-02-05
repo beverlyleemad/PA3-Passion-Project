@@ -254,9 +254,7 @@ class BoarsLife(arcade.Window):
 
         # CHECK COLLISION WITH STAR (FOOD)
         if arcade.check_for_collision(self.boar, self.star):
-            print("Boar ate the star!")
             self.boar_score = self.boar_score + 1
-            print(self.boar_score)
             self.spawn_star()   # respawn food
 
             baby = arcade.Sprite()
