@@ -26,6 +26,8 @@ It was a little annoying to work on stuff really hard, like the timer, to just d
 1. got rid of the placeholder print command for when you eat a mushroom, keeping chat clearer
 1. added collisions
 1. added death screen
+1. moved system to not take images from my downloads and used "relative paths". i looked at a couple different resources online, and these ones helped: https://chandrakundu.github.io/posts/handling-relative-paths-in-python-projects/ for directory set up, https://blender.stackexchange.com/questions/261075/how-to-use-relative-paths-instead-of-absolute-ones for example code and stuff about the way to call, and this reddit post: https://www.reddit.com/r/learnpython/comments/zf8qz7/help_understanding_relative_paths_in_python/. It works, I just hope I understand it okay.
+
 
 
  

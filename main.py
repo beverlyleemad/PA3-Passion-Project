@@ -1,5 +1,16 @@
 import arcade
 import random
+import os
+
+# folder where this file lives
+BASE_PATH = os.path.dirname(__file__)
+ASSETS_PATH = os.path.join(BASE_PATH, "assets") #where pictures and sprites are
+
+BOAR_WALK_FOLDER = os.path.join(ASSETS_PATH, "boar_walk") # boar frames folder
+
+# Welcome and death images
+WELCOME_IMAGE = os.path.join(ASSETS_PATH, "welcome to a boars life.png") # welcome image loaded
+DEATH_IMAGE = os.path.join(ASSETS_PATH, "boar_dead_screen.png") # death image loaded
 
 #
 SCREEN_WIDTH = 800
@@ -55,36 +66,14 @@ class BoarsLife(arcade.Window):
 
         # manual frames
         boar_frames = [
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile000.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile001.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile002.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile003.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile004.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile005.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile006.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile007.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile008.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile009.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile010.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile011.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile012.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile013.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile014.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile015.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile016.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile017.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile018.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile019.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile020.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile021.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile022.png"),
-            arcade.load_texture(f"{BOAR_WALK_FOLDER}/tile023.png"),
-        ]
-        
-        # welcome
-        self.welcome_sprite = arcade.Sprite(
-    "/Users/beverlylee/Downloads/welcome to a boars life.png"
-)
+        arcade.load_texture(os.path.join(BOAR_WALK_FOLDER, f"tile{i:03}.png"))
+        for i in range(24)
+    ]
+
+        self.welcome_sprite = arcade.Sprite(WELCOME_IMAGE)
+        self.death_sprite = arcade.Sprite(DEATH_IMAGE)
+
+        # settings for welcome sprite
         self.welcome_sprite.center_x = SCREEN_WIDTH // 2
         self.welcome_sprite.center_y = SCREEN_HEIGHT // 2
         self.welcome_sprite.scale = 0.5
@@ -93,10 +82,7 @@ class BoarsLife(arcade.Window):
         self.welcome_list = arcade.SpriteList()
         self.welcome_list.append(self.welcome_sprite)
 
-        #death 
-        self.death_sprite = arcade.Sprite(
-    "/Users/beverlylee/Downloads/boar_dead_screen.png"
-        )
+        #death sprite edits
         self.death_sprite.center_x = SCREEN_WIDTH // 2
         self.death_sprite.center_y = SCREEN_HEIGHT // 2
         self.death_sprite.scale = 0.5
