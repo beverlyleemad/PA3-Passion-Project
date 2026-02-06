@@ -14,6 +14,9 @@ It was a little annoying to work on stuff really hard, like the timer, to just d
 
 If I had more time, I would add options for other animals, like a deer or bunny, to play as. I would also allow the user to choose the food type they want to eat (yum!)
 
+### Class Reflection
+Some things could be planned out in advance a little bit more, like our issues with pygame could've been prevented if we had prepped, but the class worked well anyway. The class was really chill (in a nice way) and I got a lot of independent work time which I love instead of too much lecture time. I enjoyed our chats and slideshow fridays.
+
 ### Process
 1. Platformer tutorial to work on movement in big boar
 1. Added an attack feature
