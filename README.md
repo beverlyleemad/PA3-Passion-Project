@@ -10,6 +10,8 @@
 ### Reflection
 I didn't think about making a snake game at the beginning of this process. I thought I was going to make a mini hunting game, in the style of an Alien Invader game, with cute animals and a boar as the apex predator. Then, I came into peer review and everyone wanted a snake game! I ended up actually liking the snake game better, because I think the babies following the big boar are so so cute and I enjoyed coding it more than a bunch of death animations. It is also much more fun to play and it's a little different from the other projects. 
 
+It was a little annoying to work on stuff really hard, like the timer, to just delete it. Same thing with the attack feature! I spent a lot of time on those just to end up not using them, but that's life.
+
 ### Process
 1. Platformer tutorial to work on movement in big boar
 1. Added an attack feature

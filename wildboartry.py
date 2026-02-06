@@ -15,6 +15,7 @@ BOAR_WALK_FOLDER = "/Users/beverlylee/Downloads/ezgif-split"
 
 STATE_WELCOME = 0
 STATE_PLAYING = 1
+STATE_DEAD = 2
   
 
 class BoarsLife(arcade.Window):
@@ -26,6 +27,7 @@ class BoarsLife(arcade.Window):
         self.baby_boars = arcade.SpriteList()
         self.boar_positions = []
         self.baby_data = []
+        self.baby_grace_time = []
 
         self.boar = None
         self.star = None
@@ -36,6 +38,7 @@ class BoarsLife(arcade.Window):
         self.current_direction = "down"
         self.boar_texture_index = 0
 
+        self.boar_dead = False
         self.boar_score = 0
 
         arcade.set_background_color(arcade.color.ANDROID_GREEN)
@@ -48,7 +51,7 @@ class BoarsLife(arcade.Window):
 
     def setup(self):
         """Initialize the game"""
-        self.sprite_list = arcade.SpriteList()  # Single sprite list for everything
+        self.sprite_list = arcade.SpriteList()  #welcome stuff goes in here
 
         # manual frames
         boar_frames = [
@@ -90,6 +93,17 @@ class BoarsLife(arcade.Window):
         self.welcome_list = arcade.SpriteList()
         self.welcome_list.append(self.welcome_sprite)
 
+        #death 
+        self.death_sprite = arcade.Sprite(
+    "/Users/beverlylee/Downloads/boar_dead_screen.png"
+        )
+        self.death_sprite.center_x = SCREEN_WIDTH // 2
+        self.death_sprite.center_y = SCREEN_HEIGHT // 2
+        self.death_sprite.scale = 0.5
+
+        self.death_list = arcade.SpriteList()
+        self.death_list.append(self.death_sprite)
+
         # directions
         self.down_frames = list(range(0, 6))
         self.up_frames = list(range(6, 12))
@@ -116,8 +130,6 @@ class BoarsLife(arcade.Window):
         self.spawn_star()
         self.sprite_list.append(self.star)
 
-        print(self.star.center_x, self.star.center_y)
-
     def on_draw(self):
         self.clear()
 
@@ -125,6 +137,8 @@ class BoarsLife(arcade.Window):
             self.draw_welcome()
         elif self.game_state == STATE_PLAYING:
             self.draw_game()
+        elif self.game_state == STATE_DEAD:
+            self.death_list.draw()
 
     def draw_welcome(self):
         self.welcome_list.draw()
@@ -140,6 +154,32 @@ class BoarsLife(arcade.Window):
             10, SCREEN_HEIGHT - 30,
             arcade.color.BLACK, 20)
 
+    def reset_game(self):
+        # Reset baby system
+        self.baby_boars = arcade.SpriteList()
+        self.baby_data = []
+        self.boar_positions = []
+        self.baby_grace_time = []
+
+        # Reset score
+        self.boar_score = 0
+
+        # Reset boar position
+        self.boar.center_x = SCREEN_WIDTH // 2
+        self.boar.center_y = 150
+        self.boar.change_x = 0
+        self.boar.change_y = 0
+
+        self.current_frame = 0 #reset animation frame
+        self.frame_timer = 0 #reset animation timer
+        self.current_direction = "down" # reset dir to default
+
+        self.boar_positions = [(self.boar.center_x, self.boar.center_y)] #repos
+        
+        self.spawn_star() #new food
+
+        self.game_state = STATE_PLAYING #back to game
+
     def on_key_press(self, key, modifiers):
         if self.game_state == STATE_WELCOME and key == arcade.key.ENTER:
             self.game_state = STATE_PLAYING
@@ -153,7 +193,9 @@ class BoarsLife(arcade.Window):
             self.boar.change_x = -BOAR_SPEED
         if key in [arcade.key.D, arcade.key.RIGHT]:
             self.boar.change_x = BOAR_SPEED
-
+        
+        if self.game_state == STATE_DEAD and key == arcade.key.ENTER:
+            self.reset_game()
 
     def on_key_release(self, key, modifiers):
         if key in [arcade.key.W, arcade.key.S, arcade.key.UP, arcade.key.DOWN]:
@@ -195,13 +237,12 @@ class BoarsLife(arcade.Window):
             self.current_direction = "right"
             frames = self.right_frames
         else:
-            # Not moving → idle frame
+            # idle if stopped
             frames = self.get_direction_frame()
             self.current_frame = 0
             self.boar.set_texture(frames[self.current_frame])
             return
         
-
 # save path
         self.boar_positions.insert(0, (self.boar.center_x, self.boar.center_y))
         self.boar_positions = self.boar_positions[:len(self.baby_boars) * 25 + 1]
@@ -222,13 +263,14 @@ class BoarsLife(arcade.Window):
                 else:
                     data["direction"] = "up" if dy > 0 else "down"
 
-        # Animation for walking
+        # animation for walking
         self.frame_timer += delta_time
         if self.frame_timer > 0.1:  # animation speed
             self.frame_timer = 0
             self.current_frame = (self.current_frame + 1) % len(frames)
             self.boar.set_texture(frames[self.current_frame])
 
+        # find direction
         for i, baby in enumerate(self.baby_boars):
             data = self.baby_data[i]
 
@@ -247,9 +289,21 @@ class BoarsLife(arcade.Window):
                 data["frame"] = (data["frame"] + 1) % len(frames)
 
             baby.set_texture(frames[data["frame"]])
+        
+        #reduce timer
+        for i in range(len(self.baby_grace_time)):
+            self.baby_grace_time[i] -= delta_time
 
 
-        # CHECK COLLISION WITH STAR (FOOD)
+        for baby, grace in zip(self.baby_boars, self.baby_grace_time):
+            if grace <= 0 and arcade.check_for_collision(self.boar, baby):
+                self.game_state = STATE_DEAD
+                return
+
+
+
+
+        # check for collision with food
         if arcade.check_for_collision(self.boar, self.star):
             self.boar_score = self.boar_score + 1
             self.spawn_star()   # respawn food
@@ -263,6 +317,7 @@ class BoarsLife(arcade.Window):
 
             self.baby_boars.append(baby)
             self.baby_data.append({"direction": "down", "frame": 0, "timer": 0})
+            self.baby_grace_time.append(1.5)  # 1.5 seconds invincible
 
 
     def get_direction_frame(self):
@@ -274,7 +329,7 @@ class BoarsLife(arcade.Window):
             return self.left_frames
         elif self.current_direction == "right":
             return self.right_frames
-        return self.down_frames  # fallback
+        return self.down_frames  # if neeeeded
 
 
 
