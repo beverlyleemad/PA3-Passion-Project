@@ -10,7 +10,9 @@
 ### Reflection
 I didn't think about making a snake game at the beginning of this process. I thought I was going to make a mini hunting game, in the style of an Alien Invader game, with cute animals and a boar as the apex predator. Then, I came into peer review and everyone wanted a snake game! I ended up actually liking the snake game better, because I think the babies following the big boar are so so cute and I enjoyed coding it more than a bunch of death animations. It is also much more fun to play and it's a little different from the other projects. 
 
-It was a little annoying to work on stuff really hard, like the timer, to just delete it. Same thing with the attack feature! I spent a lot of time on those just to end up not using them, but that's life.
+It was a little annoying to work on stuff really hard, like the timer, to just delete it. Same thing with the attack feature! I spent a lot of time on those just to end up not using them, but that's life. The other thing that was difficult was working on the hitboxes last minute, from my peer review. I don't know if I double called the hitbox import, but it worked after the double-call but not before... so I don't love that. 
+
+If I had more time, I would add options for other animals, like a deer or bunny, to play as. I would also allow the user to choose the food type they want to eat (yum!)
 
 ### Process
 1. Platformer tutorial to work on movement in big boar
@@ -27,6 +29,8 @@ It was a little annoying to work on stuff really hard, like the timer, to just d
 1. added collisions
 1. added death screen
 1. moved system to not take images from my downloads and used "relative paths". i looked at a couple different resources online, and these ones helped: https://chandrakundu.github.io/posts/handling-relative-paths-in-python-projects/ for directory set up, https://blender.stackexchange.com/questions/261075/how-to-use-relative-paths-instead-of-absolute-ones for example code and stuff about the way to call, and this reddit post: https://www.reddit.com/r/learnpython/comments/zf8qz7/help_understanding_relative_paths_in_python/. It works, I just hope I understand it okay.
+1. peer review: add hitboxes
+1. added hitboxes (looked here: https://api.arcade.academy/en/3.3.3/api_docs/api/hitbox.html)
 
 
 

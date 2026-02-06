@@ -1,6 +1,8 @@
 import arcade
 import random
 import os
+from arcade.hitbox import HitBox
+import arcade.hitbox
 
 # folder where this file lives
 BASE_PATH = os.path.dirname(__file__)
@@ -39,6 +41,7 @@ class BoarsLife(arcade.Window):
         self.boar_positions = []
         self.baby_data = []
         self.baby_grace_time = []
+
 
         self.boar = None
         self.star = None
@@ -147,6 +150,7 @@ class BoarsLife(arcade.Window):
         self.boar_positions = []
         self.baby_grace_time = []
 
+    
         # Reset score
         self.boar_score = 0
 
@@ -280,11 +284,12 @@ class BoarsLife(arcade.Window):
         for i in range(len(self.baby_grace_time)):
             self.baby_grace_time[i] -= delta_time
 
-
         for baby, grace in zip(self.baby_boars, self.baby_grace_time):
             if grace <= 0 and arcade.check_for_collision(self.boar, baby):
                 self.game_state = STATE_DEAD
                 return
+        
+        
 
 
 
@@ -300,6 +305,10 @@ class BoarsLife(arcade.Window):
             baby.scale = BOAR_SCALING * 0.75
             baby.center_x = self.boar.center_x
             baby.center_y = self.boar.center_y
+
+            algo = arcade.hitbox.SimpleHitBoxAlgorithm()
+            points = algo.calculate(baby.texture.image)
+            baby._hit_box = HitBox(points)
 
             self.baby_boars.append(baby)
             self.baby_data.append({"direction": "down", "frame": 0, "timer": 0})
